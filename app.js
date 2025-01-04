@@ -6,6 +6,7 @@ const concertsRoutes = require("./routes/concerts");
 const venuesRoutes = require("./routes/venues");
 const authRoutes = require("./routes/auth");
 const path = require("path");
+const statRoutes = require("./routes/stats");
 
 const app = express();
 
@@ -21,6 +22,7 @@ setupBodyParser(app);
 app.use("/api/concerts", concertsRoutes);
 app.use("/api/venues", venuesRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/stats", statRoutes);
 
 // Serve uploads
 app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
