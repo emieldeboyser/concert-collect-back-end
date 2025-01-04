@@ -26,14 +26,24 @@ router.get("/", async (req, res) => {
       venueCount[a] > venueCount[b] ? a : b
     );
 
-    const last3Concerts = results.slice(-3);
+    // transform mostFrequentVenue into a number
+    const mostFrequentVenueNumber = parseInt(mostFrequentVenue);
+
+    const last3Concerts = results.slice(0, 3);
+
+    // fetch name of the most popular venue
+
+    const [venue_name] = await connection.query(
+      "SELECT * FROM venues WHERE id = ?",
+      [mostFrequentVenueNumber]
+    );
 
     // get all the images for the last 3 concerts
 
     // Prepare the response data
     const data = {
       totalConcerts: results.length,
-      most_popular_venue: mostFrequentVenue,
+      most_popular_venue: venue_name[0].name,
       different_venues: numberOfDistinctVenues,
       last_concerts: last3Concerts,
     };
