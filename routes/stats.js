@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 const { getConnection } = require("../config/db");
 
+const renderPerYear = (results) => {
+  const concertsPerYear = results.reduce((acc, result) => {
+    const year = new Date(result.created_at).getFullYear();
+    acc[year] = (acc[year] || 0) + 1;
+    return acc;
+  }, {});
+
+  return concertsPerYear;
+};
+
 // FETCH VENUES
 router.get("/", async (req, res) => {
   console.log("Fetching stats...");
@@ -46,6 +56,8 @@ router.get("/", async (req, res) => {
       most_popular_venue: venue_name[0].name,
       different_venues: numberOfDistinctVenues,
       last_concerts: last3Concerts,
+      concerts_per_year: renderPerYear(results),
+      favourite_concert: 3,
     };
 
     res.json(data);
