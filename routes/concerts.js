@@ -24,6 +24,15 @@ router.post("/", async (req, res) => {
       ORDER BY ${sortColumn} ${sortOrder};
     `);
 
+    // Modify the price to "Free" if it's 0.00 (after converting to a number)
+    results.forEach((concert) => {
+      if (parseFloat(concert.price) === 0.0) {
+        concert.price = "Free";
+      } else {
+        concert.price = "€" + concert.price;
+      }
+    });
+
     res.json(results);
   } catch (err) {
     console.error("Error fetching concerts:", err);
