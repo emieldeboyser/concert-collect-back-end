@@ -21,7 +21,7 @@ setupBodyParser(app);
 // Routes
 app.use("/api/concerts", concertsRoutes);
 app.use("/api/venues", venuesRoutes);
-app.use("/api/auth", authRoutes);
+app.use("", authRoutes);
 app.use("/api/stats", statRoutes);
 
 // Serve uploads

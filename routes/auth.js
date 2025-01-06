@@ -7,8 +7,6 @@ require("dotenv").config();
 router.post("/api/getAccessToken", async (req, res) => {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-  console.log("Client ID:", clientId);
-  console.log("Client secret:", clientSecret);
 
   if (!clientId || !clientSecret) {
     return res.status(500).json({ error: "Client ID and secret not set" });
