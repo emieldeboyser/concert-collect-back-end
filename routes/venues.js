@@ -70,9 +70,26 @@ router.delete("/:id", async (req, res) => {
 
 // POST VENUE
 router.post("/add", async (req, res) => {
-  const { name, country, city } = req.body;
+  console.log("REQ BODY:", req.body);
+  const { name, country, city, adress } = req.body;
+  let latitude = "";
+  let longitude = "";
 
-  console.log("Request body:", req.body);
+  console.log("Adding venue:", name, country, city, adress);
+
+  if (adress) {
+    try {
+      const response = await axios.get(
+        `https://geocode.maps.co/search?q=${adress}&api_key=${process.env.MAP_TOKEN}`
+      );
+      console.log(response, "EMEOEOEEOEEOEOEOEOEO");
+      latitude = response.data.latitude;
+      longitude = response.data.longitude;
+    } catch (error) {
+      console.error("Error fetching access token:", error);
+      res.status(500).json({ error: "Failed to fetch access token" });
+    }
+  }
 
   if (!name || !country) {
     return res.status(400).json({ error: "Please fill in all fields" });
@@ -81,8 +98,8 @@ router.post("/add", async (req, res) => {
   try {
     const connection = getConnection(); // Get the database connection
     await connection.query(
-      "INSERT INTO venues (name, country, location) VALUES (?, ?, ?)",
-      [name, country, city]
+      "INSERT INTO venues (name, country, location, latitude, longitude) VALUES (?, ?, ?, ?, ?)",
+      [name, country, city, latitude, longitude]
     );
     console.log("Venue added successfully");
     res.json({ message: "Venue added successfully" });

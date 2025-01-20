@@ -3,6 +3,7 @@ const cors = require("./middleware/cors");
 const setupBodyParser = require("./middleware/bodyParser");
 const { connectToDatabase } = require("./config/db");
 const concertsRoutes = require("./routes/concerts");
+const mapRoutes = require("./routes/map");
 const venuesRoutes = require("./routes/venues");
 const authRoutes = require("./routes/auth");
 const path = require("path");
@@ -14,6 +15,7 @@ const app = express();
   await connectToDatabase(); // Ensure the database connection is established before the server starts
 })();
 
+app.set("trust proxy", true);
 // Middleware
 app.use(cors);
 setupBodyParser(app);
@@ -23,6 +25,7 @@ app.use("/api/concerts", concertsRoutes);
 app.use("/api/venues", venuesRoutes);
 app.use("", authRoutes);
 app.use("/api/stats", statRoutes);
+app.use("/api/adress", mapRoutes);
 
 // Serve uploads
 app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
